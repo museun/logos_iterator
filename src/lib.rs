@@ -127,3 +127,32 @@ pub struct Span {
     pub start: usize,
     pub end: usize,
 }
+
+impl std::ops::Index<Span> for str {
+    type Output = str;
+    fn index(&self, index: Span) -> &Self::Output {
+        self.index(index.start..index.end)
+    }
+}
+
+impl std::ops::Index<Span> for String {
+    type Output = str;
+    fn index(&self, index: Span) -> &Self::Output {
+        self.index(index.start..index.end)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn span_index() {
+        let s = "this is a test";
+        let span = Span { start: 5, end: 9 };
+        assert_eq!("is a", &s[span]);
+
+        let s = String::from(s);
+        let span = Span { start: 5, end: 9 };
+        assert_eq!("is a", &s[span]);
+    }
+}
